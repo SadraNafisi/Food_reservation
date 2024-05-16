@@ -1,0 +1,67 @@
+{% extends 'reservation/base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="bg-image"
+     style="background-image: url({% static 'images/background.png' %});min-height: 150vh;">
+    <div class="container mb-5">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-7 col-sm-12 offset-md-1 p-4 text-center">
+                 {% if messages %}
+              {% for message in messages%}
+              <div class="alert alert-info" role="alert">
+                {{message}}
+              </div>
+              {% endfor %}
+              {% endif %}
+                <h1 style="color:#f7820c; background-color:#ffffff">Online Food Delivery Service</h1>
+            </div>
+        </div>
+        <form method="get" action="{% url 'index-choose'%}">
+            <div class="row justify-content-center ">
+                <div class="col-md-4 col-sm-12 offset-md-1 p-4 text-center">
+                    <div class="input-group">
+                      <input type="search" class="form-control rounded" name="choices"
+                             placeholder="search your food to check ..." aria-label="Search"
+                             aria-describedby="search-addon" value="{{ request.GET.choices }}"/>
+                      <button type="submit" class="btn btn-warning" data-mdb-ripple-init>search</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- available card -->
+
+        <div class="row d-flex align-items-center ">
+            {% for item in items %}
+            <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
+                <div class="card">
+                    {% if item.image %}
+                  <img src="{{ item.image.url }}" class="card-img-top"  height="200" width="250"/>
+                    {% else %}
+                    <img src="{% static 'images/No_Image_Available.png'%}" class=" card-img-top"
+                             height="200" width="250" style="border-style: solid;" />
+                    {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{item.type}}</h5>
+                    <h4 class="card-title">{{item.name}}</h4>
+                    <h5 class="card-title">{{item.price}} t</h5>
+                  </div>
+                    {% if item.available %}
+                  <footer class="text-center " style="background-color:green; color:white">
+                       <h3 class="mt-2">Available</h3>
+                  </footer>
+                    {% else %}
+                    <footer class="text-center " style="background-color:red; color:white">
+                       <h3 class="mt-2">Out-Of-Order</h3>
+                  </footer>
+                    {% endif %}
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+         <!-- available card -->
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,87 @@
+{% extends 'reservation/base.html' %}
+
+{% block content %}
+{% load static%}
+
+
+
+<div class="bg-image"
+     style="background-image: url({% static 'images/background2.jpg' %});min-height: 150vh;">
+  <div class="container mt-3">
+    <form method="post" action="{% url 'order-item'%}">
+      {% csrf_token %}
+      {% if messages %}
+      {% for message in messages%}
+      <div class="row d-flex justify-content-center ">
+        <div class="col-md-6  col-sm-12 offset-md-1 p-4 text-center ">
+          <div class="alert alert-info" role="alert">
+            {{message}}
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      {% endif %}
+      <div class="row d-flex justify-content-center ">
+        <div class="col-md-2  col-sm-12 offset-md-1 p-4 text-center ">
+          <h1 style="color:#f7820c; background-color:#ffffff;" >Order</h1>
+        </div>
+      </div>
+     <div class="row d-flex align-items-center ">
+            {% for item in items %}
+       <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
+          <div class="card" >
+            {% if item.image %}
+            <img src="{{item.image.url}}" class="card-img-top" alt="Product Image" height="200" width="250">
+            {% else %}
+            <img src="{% static 'images/No_Image_Available.png'%}" class=" card-img-top"
+                 height="200" width="250"  />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ item.name }}</h5>
+              <p class="card-text">{{ item.type }}</p>
+              <input type="number" name="{{item.name}}_amount"  class="form-control" value="0" min="0" max="100" step="1" />
+            </div>
+
+          </div>
+
+        </div>
+       {% endfor %}
+        <div class="row d-flex justify-content-center mt-3 ">
+          <div class="col-md-4  col-sm-12 offset-md-1 p-4 text-center">
+          <!-- Button trigger modal -->
+  <button type="button" class="btn btn-dark" style="font-size: 1.5rem; padding: 1rem 2rem;"
+          data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#staticBackdrop">
+    Place Order
+  </button>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="staticBackdrop"
+    data-mdb-backdrop="static"
+    data-mdb-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">are you order all items correctly?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Back</button>
+          <button type="submit" class="btn btn-dark" data-mdb-ripple-init>confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends 'reservation/base.html' %}
+
+{% block content%}
+{% load static %}
+<div class="container mb-5">
+    <div class="row d-flex align-items-center ">
+        {% for order in orders %}
+        <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">ID: {{order.pk}}</h3>
+                <h4 class="card-title">customer: {{order.customer}}</h4>
+                 <h5 class="card-title">Date: order.date</h5>
+              </div>
+                  <a href="{% url 'order-check' order.pk%}">
+                   <button class="btn btn-primary"> Check</button>
+                  </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content%}
