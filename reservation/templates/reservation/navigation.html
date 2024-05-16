@@ -35,6 +35,13 @@
 
     <!-- Right elements -->
     <div class="d-flex align-items-right mr-5">
+        {%  if request.user.is_staff   %}
+        <a class="nav-link" href="{% url 'order-list-all'%}">
+            <button data-mdb-ripple-init type="button" class="btn btn-outline-info btn-link px-3 me-2">
+             all orders
+            </button>
+        </a>
+        {% endif %}
         {% if request.user.is_authenticated %}
 
         <a class="nav-link" href="{% url 'order-list'%}">

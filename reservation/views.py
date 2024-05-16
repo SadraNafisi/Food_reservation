@@ -19,7 +19,6 @@ def loginUser_unreachable(request,):
 
 class Index(View):
     def get(self,request,*args,**kwarg):
-        print(Item.objects.filter(type='2'))
         items = Item.objects.all().order_by('-available',"type__name",'name')
         context={
             'items':items
@@ -174,3 +173,15 @@ class Order_List(View):
         return render(request, 'reservation/order-list.html', context)
 
 # Create your views here.
+
+class Order_list_All(View):
+    @method_decorator(allowed_user(['admins','staffs']))
+    def get(self,request,*args,**kwargs):
+        orders=Order.objects.all()
+
+        context = {
+            'orders': orders
+        }
+
+        return render(request, 'reservation/order-list.html', context)
+
