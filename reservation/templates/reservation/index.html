@@ -9,8 +9,8 @@
             <div class="col-md-7 col-sm-12 offset-md-1 p-4 text-center">
                  {% if messages %}
               {% for message in messages%}
-              <div class="alert alert-info" role="alert">
-                {{message}}
+              <div class="alert alert-{{message.tags}}" role="{{message.tags}}">
+                {{message.tags}} {{message}}
               </div>
               {% endfor %}
               {% endif %}

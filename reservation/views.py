@@ -45,7 +45,7 @@ class Order_Item(View):
             try:
                 item_amount = request.POST[f'{chosen_item.name}_amount']
             except:
-                messages.info(request, f' {items[i]} not found')
+                messages.warning(request, f' {items[i]} not found')
                 return redirect('order-item')
 
             if (int(item_amount) != 0):
@@ -149,9 +149,9 @@ class Order_Check(View):
     def get(self,request,pk,*args,**kwargs):
         order = Order.objects.filter(pk=pk)[0]
         suborders = SubOrder.objects.filter(order=order)
-
-        if(order.customer != request.user):
-            messages.info(request,'you are not authorized to see this order detail.')
+        # is_admin= request.user.groups.filter(name='admins',user=request.user)
+        if(order.customer != request.user)and(not request.user.is_staff ):
+            messages.warning(request,'you are not authorized to see this order detail.')
             return redirect('index')
 
         context={

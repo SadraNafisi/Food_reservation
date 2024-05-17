@@ -13,8 +13,8 @@
               <h2 class="text-uppercase text-center mb-5">Create an account</h2>
               {% if messages %}
               {% for message in messages%}
-              <div class="alert alert-info" role="alert">
-                {{message}}
+              <div class="alert alert-{{message.tags}}" role="{{message.tags}}">
+                {{message.tags}} {{message}}
               </div>
               {% endfor %}
               {% endif %}

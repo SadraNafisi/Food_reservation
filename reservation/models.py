@@ -21,7 +21,7 @@ class SubOrder(models.Model):
     amount = models.IntegerField()
     order = models.ForeignKey('Order',on_delete=models.CASCADE)
     def __str__(self):
-        return self.item.name
+        return f' {self.item.name}(order{self.order.pk})'
     def suborder_price (self):
         return self.amount * self.item.price
 class Order(models.Model):
@@ -29,7 +29,7 @@ class Order(models.Model):
     order_date = models.DateTimeField("Order date",auto_now_add=True) ##add this in final changes
 
     def __str__(self):
-        return str(self.pk)
+        return  f'order{self.pk}'
 
     def total_price(self):
         total_price=0

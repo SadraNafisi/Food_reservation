@@ -15,4 +15,4 @@ urlpatterns = [
     path('order-list/',Order_List.as_view(), name='order-list'),
     path('order-list-all',Order_list_All.as_view(),name='order-list-all')
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
