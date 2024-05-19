@@ -28,6 +28,12 @@
         <li class="nav-item">
           <a class="nav-link" href="{%url 'order-item'%}">Order here</a>
         </li>
+          {% if request.user.is_staff %}
+          <li class="nav-item">
+          <a class="nav-link" href="{%url 'dashboard'%}">dashboard</a>
+        </li>
+          {% endif %}
+
       </ul>
       <!-- Left links -->
     </div>

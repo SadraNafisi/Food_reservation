@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 from .decorator import unauthenticated_user , allowed_user
 from django.utils.decorators import method_decorator
 
-
 def loginUser_unreachable(request,):
     if (request.user.is_authenticated):
         messages.info(request, 'you are already in your account.')
@@ -37,8 +36,6 @@ class Order_Item(View):
 
     def post(self, request, *args, **kwargs):
         total_item_amount = 0
-        order = Order.objects.create(customer=request.user)
-
         items = Item.objects.filter(available=True).order_by("type__name", 'name')
         for i in range(0, len(request.POST) - 1):
             chosen_item = items[i]
@@ -50,10 +47,12 @@ class Order_Item(View):
 
             if (int(item_amount) != 0):
                 total_item_amount += 1
+                if total_item_amount == 1:
+                    order = Order.objects.create(customer=request.user)
                 SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
-        if (total_item_amount != 0):
-            order.save()
-        else:
+                print("helloll")
+
+        if (total_item_amount == 0):
             messages.info(request, 'you did not choose any of these items')
             return redirect('order-item')
 

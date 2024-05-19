@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 class Item(models.Model):
@@ -36,9 +38,7 @@ class Order(models.Model):
         suborders= SubOrder.objects.filter(order=self.pk)
         for suborder in suborders:
            total_price +=suborder.item.price * suborder.amount
-
         return total_price
-
 
 
 # Create your models here.

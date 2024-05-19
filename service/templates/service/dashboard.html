@@ -1,5 +1,93 @@
 {% extends 'reservation/base.html'%}
 
 {% block content %}
-<h1>Dashboard</h1>
+<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+<div class="container">
+        <h1 class="mt-5 mb-5">Admin Dashboard</h1>
+    <h2 class="topic">Today information</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card order-container">
+                    <div class="card-body">
+                        <h5 class="card-title">All Orders Today</h5>
+                        <p class="card-text">{{today_order_amount}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card income-container">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Income</h5>
+                        <p class="card-text">{{today_total_income}} t</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <h2 class="topic">Recent Orders</h2>
+            {% for order in recent_orders%}
+            <div class="col-md-3 mt-2">
+                <div class="card order-card">
+                    <div class="card-body">
+                        <p>ID: {{ order.id }}</p>
+                        <p>Customer: {{order.customer}}</p>
+                        <p>Date: {{order.order_date}}</p>
+                        <a href="{% url 'order-check' order.pk %}"><div class="button-container">
+                            <button class="btn btn-primary">Check</button>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+<style>
+    .order-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .income-container {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .order-card {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .topic {
+            border-bottom: 2px solid #007bff;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom:10px
+            padding-top: 10px;
+
+
+        }
+        .custom-footer {
+            background-color: purple;
+            color: white;
+            text-align: center;
+          }
+
+          .item-link {
+            display: inline-block;
+            margin: 0 10px;
+            cursor: pointer;
+          }
+</style>
 {% endblock content %}
