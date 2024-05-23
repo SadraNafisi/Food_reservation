@@ -29,9 +29,10 @@ class SubOrder(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(User,on_delete=models.RESTRICT)
     order_date = models.DateTimeField("Order date",auto_now_add=True) ##add this in final changes
+    is_confirm = models.BooleanField(db_default=True,default=False)
 
     def __str__(self):
-        return  f'order{self.pk}'
+        return  f'order{self.pk}{self.is_confirm}'
 
     def total_price(self):
         total_price=0
@@ -39,6 +40,8 @@ class Order(models.Model):
         for suborder in suborders:
            total_price +=suborder.item.price * suborder.amount
         return total_price
-
+    def confirmed(self):
+        self.is_confirm = True
+        self.save()
 
 # Create your models here.

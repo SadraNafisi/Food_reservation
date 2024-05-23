@@ -9,14 +9,10 @@
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reservation/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/navigation.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/order-check.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/order-check.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/order.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/order.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reservation/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reservation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/templates/service/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/service/templates/service/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,15 +39,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/sadra/Documents/1-need/Guilan university/Term9/project/mainproject/FoodReservation/service/templates/service&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/home/sadra/Documents/1-need/Guilan university/Term9/project/mainproject/FoodReservation/service/templates/service",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/service/templates" />
@@ -78,15 +74,5 @@
       <updated>1715347111529</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/reservation/decorator.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -13,6 +13,8 @@ urlpatterns = [
     path('logout/', Logout_User.as_view(), name='logout'),
     path('order-check/<pk>/',Order_Check.as_view(),name="order-check"),
     path('order-list/',Order_List.as_view(), name='order-list'),
-    path('order-list-all',Order_list_All.as_view(),name='order-list-all')
+    path('order-list-all',Order_list_All.as_view(),name='order-list-all'),
+    path('order-confirm/<int:pk>',Confirm_Order.as_view(),name='order-confirm'),
+    path('order-delete/<int:pk>',Delete_Order.as_view(),name='order-delete'),
 
 ]
