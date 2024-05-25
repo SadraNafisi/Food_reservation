@@ -15,17 +15,21 @@ def loginUser_unreachable(request,):
         return True
     else:
         return False
-def context_order_items(request,items):
+def context_order_items(request,items,is_searching=False):
     """this method is because for showing what was
        the unconfirmed orders of customers if they
        have"""
-    if unconfirmed_order := Order.objects.filter(is_confirm=False, customer=request.user):
+
+    if (request.user.is_authenticated) and (unconfirmed_order := Order.objects.filter(is_confirm=False, customer=request.user)):
         messages.info(request,"you did not confirm last "
                               "order . their amount can be seen in items below."
                               "also you could remove or confirm order in your orderlist.")
         suborders = SubOrder.objects.filter(order=unconfirmed_order[0])
         for suborder in suborders:
-            items = items.exclude(pk=suborder.item.pk)
+            if not(suborder.item in items):
+                suborders=suborders.exclude(pk=suborder.pk)
+            else:
+                items = items.exclude(pk=suborder.item.pk)
         context = {
             'items': items,
             'suborders': suborders
