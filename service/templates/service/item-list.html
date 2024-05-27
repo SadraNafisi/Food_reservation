@@ -33,21 +33,7 @@
 
 <!-- Modal -->
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">...</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+
      <div class="row d-flex align-items-center ">
             {% for item in items %}
        <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
@@ -61,7 +47,8 @@
             <div class="card-body">
               <h5 class="card-title">{{ item.name }}</h5>
               <p class="card-text">{{ item.type }}</p>
-              <input type="number" name="{{item.name}}_amount"  class="form-control" value="0" min="0" max="100" step="1" />
+              <a><button type="button" class="btn btn-warning" >update</button></a>
+              <a><button type="button" class="btn btn-danger">delete</button></a>
             </div>
 
           </div>

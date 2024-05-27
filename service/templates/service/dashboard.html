@@ -1,7 +1,7 @@
 {% extends 'reservation/base.html'%}
 
 {% block content %}
-<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+{% include 'service/dashboard-navigation.html'%}
 <div class="container">
         <h1 class="mt-5 mb-5">Admin Dashboard</h1>
     <h2 class="topic">Today information</h2>
@@ -43,6 +43,7 @@
             {% endfor %}
         </div>
     </div>
+
 <style>
     .order-container {
             background-color: #f8f9fa;
@@ -90,4 +91,5 @@
             cursor: pointer;
           }
 </style>
+
 {% endblock content %}

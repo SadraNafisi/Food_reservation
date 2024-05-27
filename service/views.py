@@ -6,6 +6,7 @@ from django.utils import timezone
 from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from reservation.models import Item
 
 
 class Dashboard(View):
@@ -25,5 +26,14 @@ class Dashboard(View):
             "today_order_amount": today_order_amount,
         }
         return render(request,'service/dashboard.html',context)
+
+class Item_List(View):
+    def get(self,request,*args,**kwargs):
+        items= Item.objects.all().order_by("type__name","name")
+
+        context={
+            'items':items
+        }
+        return render(request,'service/item-list.html',context)
 
 # Create your views here.
