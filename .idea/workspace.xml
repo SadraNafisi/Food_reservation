@@ -5,12 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d5d96fd-6c0f-4786-83e9-1a76a3f96fcd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/service/templates/service/dashboard-navigation.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/templates/service/item-list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/templates/service/add-item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/templates/service/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/templates/service/update-item.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/order.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/order.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/item_images/Cake.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reservation/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/navigation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/templates/service/dashboard-navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/service/templates/service/dashboard-navigation.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/templates/service/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/service/templates/service/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/templates/service/item-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/service/templates/service/item-list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/views.py" afterDir="false" />
     </list>
@@ -28,6 +34,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="ConfirmOrder" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
@@ -43,7 +54,7 @@
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ConfirmOrder&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ItemEdit&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/sadra/Documents/1-need/Guilan university/Term9/project/mainproject/FoodReservation/service/templates/service&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
   }
