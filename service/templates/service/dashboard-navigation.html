@@ -7,16 +7,16 @@
       data-mdb-collapse-init
       class="navbar-toggler"
       type="button"
-      data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
+      data-mdb-target="#navbarSupportedContent2"
+      aria-controls="navbarSupportedContent2"
       aria-expanded="false"
-      aria-label="Toggle navigation"
+      aria-label="Toggle navigation2"
     >
       <i class="fas fa-bars"></i>
     </button>
 
     <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
       <!-- Left links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
@@ -39,9 +39,9 @@
     <div class="d-flex align-items-right mr-5">
 
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'order-list-all' %}">
             <button data-mdb-ripple-init type="button" class="btn btn-outline-info btn-link px-3 me-2">
-             your orders
+             all orders
             </button>
         </a>
         <a class="nav-link" href="#">

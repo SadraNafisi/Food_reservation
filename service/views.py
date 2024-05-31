@@ -56,8 +56,8 @@ class Update_Item(View):
         print(bool(contents['clear']))
         if 'image' in request.FILES:
             if(contents['clear'] == 'True'):
-                messages.warning(request,'there is only possible to'
-                                         'clear the image or upload a new one.')
+                messages.warning(request,'Please either submit'
+                                         ' a file or check the clear checkbox, not both.')
                 return redirect(f'update-item',item.pk)
             item.image = request.FILES['image']
         if(contents['clear'] == 'True'):
@@ -74,7 +74,7 @@ class Update_Item(View):
             item.available = contents['available']
 
         item.save()
-        return redirect('dashboard')
+        return redirect('item-list')
 
 
 class Delete_Item(View):

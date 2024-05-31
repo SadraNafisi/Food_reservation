@@ -122,54 +122,54 @@ class IndexChoose(View):
         return render(request, 'reservation/index.html', context)
 
 
-class Order_Item(View):
-    @method_decorator(login_required(login_url='login'))
-    def get(self,request,*args,**kwargs):
-        items = Item.objects.filter(available=True).order_by("type__name",'name')
-
-        context = {
-            'items':items
-        }
-        return render(request, 'reservation/order.html', context)
-
-    def post(self, request, *args, **kwargs):
-        total_item_amount = 0
-        items = Item.objects.filter(available=True).order_by("type__name", 'name')
-        for i in range(0, len(request.POST) - 1):
-            chosen_item = items[i]
-            try:
-                item_amount = request.POST[f'{chosen_item.name}_amount']
-            except:
-                messages.warning(request, f' {items[i]} not found')
-                return redirect('order-item')
-
-            if (int(item_amount) != 0):
-                total_item_amount += 1
-                if total_item_amount == 1:
-                    order = Order.objects.create(customer=request.user)
-                SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
-                print("helloll")
-
-        if (total_item_amount == 0):
-            messages.info(request, 'you did not choose any of these items')
-            return redirect('order-item')
-
-        # print(SubOrder.objects.filter(order=order))
-        # context={
-        #     'suborders':SubOrder.objects.filter(order=order),
-        #     'order': order
-        #
-        # }
-        return redirect('order-check', pk=order.pk)
-
-        # if(len(suborders) == len(items)):
-        #     for suborder in suborders:
-        #         if suborder != 0:
-        #             SubOrder.objects.create()
-        # context={
-        #
-        # }
-        # return render(request,'reservation/order-check.html',context)
+# class Order_Item(View):
+#     @method_decorator(login_required(login_url='login'))
+#     def get(self,request,*args,**kwargs):
+#         items = Item.objects.filter(available=True).order_by("type__name",'name')
+#
+#         context = {
+#             'items':items
+#         }
+#         return render(request, 'reservation/order.html', context)
+#
+#     def post(self, request, *args, **kwargs):
+#         total_item_amount = 0
+#         items = Item.objects.filter(available=True).order_by("type__name", 'name')
+#         for i in range(0, len(request.POST) - 1):
+#             chosen_item = items[i]
+#             try:
+#                 item_amount = request.POST[f'{chosen_item.name}_amount']
+#             except:
+#                 messages.warning(request, f' {items[i]} not found')
+#                 return redirect('order-item')
+#
+#             if (int(item_amount) != 0):
+#                 total_item_amount += 1
+#                 if total_item_amount == 1:
+#                     order = Order.objects.create(customer=request.user)
+#                 SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
+#                 print("helloll")
+#
+#         if (total_item_amount == 0):
+#             messages.info(request, 'you did not choose any of these items')
+#             return redirect('order-item')
+#
+#         # print(SubOrder.objects.filter(order=order))
+#         # context={
+#         #     'suborders':SubOrder.objects.filter(order=order),
+#         #     'order': order
+#         #
+#         # }
+#         return redirect('order-check', pk=order.pk)
+#
+#         # if(len(suborders) == len(items)):
+#         #     for suborder in suborders:
+#         #         if suborder != 0:
+#         #             SubOrder.objects.create()
+#         # context={
+#         #
+#         # }
+#         # return render(request,'reservation/order-check.html',context)
 
 class AboutUs(View):
 
@@ -248,7 +248,7 @@ class Order_Check(View):
 class Order_List(View):
     @method_decorator(login_required(login_url='login'))
     def get(self,request,*args,**kwargs):
-        orders=Order.objects.filter(customer=request.user)
+        orders=Order.objects.filter(customer=request.user).order_by('-pk')
 
         context={
             'orders': orders
@@ -261,7 +261,7 @@ class Order_List(View):
 class Order_list_All(View):
     @method_decorator(allowed_user(['admins','staffs']))
     def get(self,request,*args,**kwargs):
-        orders=Order.objects.all()
+        orders=Order.objects.all().order_by('-pk')
 
         context = {
             'orders': orders
