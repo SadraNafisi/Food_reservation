@@ -20,7 +20,7 @@ def context_order_items(request,items,is_searching=False):
        the unconfirmed orders of customers if they
        have"""
 
-    if (request.user.is_authenticated) and (unconfirmed_order := Order.objects.filter(is_confirm=False, customer=request.user)):
+    if (request.user.is_authenticated) and (unconfirmed_order := Order.objects.filter(is_confirmed=False, customer=request.user)):
         messages.info(request,"you did not confirm last "
                               "order . their amount can be seen in items below."
                               "also you could remove or confirm order in your orderlist.")
@@ -53,11 +53,11 @@ class Index(View):
             one unconfirmed order.'''
         total_item_amount = 0
         items = Item.objects.filter(available=True).order_by("type__name", 'name')
-        unconfirmed_order = Order.objects.filter(customer=request.user,is_confirm=False)
+        unconfirmed_order = Order.objects.filter(customer=request.user,is_confirmed=False)
         if not unconfirmed_order:
             order = Order.objects.create(customer=request.user)
         else:
-            order=Order.objects.filter(customer=request.user,is_confirm=False)[0]
+            order=Order.objects.filter(customer=request.user,is_confirmed=False)[0]
 
         for i in range(0, len(request.POST) - 1):
             chosen_item = items[i]
@@ -93,7 +93,7 @@ class Index(View):
         #             if not unconfirmed_order:
         #                 order = Order.objects.create(customer=request.user).save()
         #             else:
-        #                 order=Order.objects.filter(customer=request.user,is_confirm=False)[0]
+        #                 order=Order.objects.filter(customer=request.user,is_confirmed=False)[0]
         #
         #
         #         if(SubOrder.objects.filter(item=chosen_item, order=order)):
@@ -232,7 +232,11 @@ class Logout_User(View):
 class Order_Check(View):
     def get(self,request,pk,*args,**kwargs):
         order = Order.objects.filter(pk=pk)[0]
-        suborders = SubOrder.objects.filter(order=order)
+        if order.is_confirmed:
+            suborders=order.suborders
+        else:
+            suborders = SubOrder.objects.filter(order=order)
+        print(suborders)
         # is_admin= request.user.groups.filter(name='admins',user=request.user)
         if(order.customer != request.user)and(not request.user.is_staff ):
             messages.warning(request,'you are not authorized to see this order detail.')
@@ -271,8 +275,10 @@ class Order_list_All(View):
 
 class Confirm_Order(View):
     def get(self,request,pk,*args,**kwargs):
-        Order.objects.get(pk=pk).confirmed()
-        print(Order.objects.get(pk=pk).is_confirm)
+        order=Order.objects.filter(pk=pk).get()
+        order.is_confirmed=True
+        order.save()
+        print(Order.objects.get(pk=pk).is_confirmed)
         return redirect('order-check',pk=pk)
 class Delete_Order(View):
     def get(self,request,pk,*args,**kwargs):
