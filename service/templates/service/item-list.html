@@ -22,7 +22,7 @@
       {% endif %}
       <div class="row d-flex justify-content-center ">
         <div class="col-md-2  col-sm-12 offset-md-1 p-4 text-center ">
-          <h1 style="color:#f7820c; background-color:#ffffff;" >Order</h1>
+          <h1 style="color:#f7820c; background-color:#ffffff;" >Items</h1>
         </div>
       </div>
 
@@ -40,6 +40,7 @@
             <div class="card-body">
               <h5 class="card-title">{{ item.name }}</h5>
               <p class="card-text">{{ item.type }}</p>
+              <p class="card-text">{{ item.price }} t</p>
               <a href="{% url 'update-item' item.pk %}"><button type="button" class="btn btn-warning" >update</button></a>
                 <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#Modal-{{item.pk}}">
@@ -52,14 +53,14 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">are you sure you want to delete {{item.name}}</div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
                      <a href="{% url 'delete-item' item.pk %}">
-                         <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+                         <button type="button" class="btn btn-danger" data-mdb-ripple-init>Delete</button>
                      </a>
                   </div>
                 </div>

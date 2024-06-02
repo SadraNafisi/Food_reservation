@@ -27,8 +27,8 @@
     <div class="row d-flex justify-content-center ">
         <div class="col-md-6  col-sm-12  p-2 text-center ">
             <h2>
-            {%if order.isconfirmed %}
-                {{suborder.item_name}}{{suborder.amount|pluralize}}  :  {{suborder.amount}} * {{suborder.item_price}} =
+            {%if order.is_confirmed %}
+                {{ suborder.item_name }}{{suborder.amount|pluralize}}  :  {{suborder.amount}} * {{suborder.item_price}} =
                 {{suborder.suborder_price}}
             {%else%}
 

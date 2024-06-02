@@ -42,15 +42,15 @@ class Order(models.Model):
                 {
                     'item_name': suborder.item.name,
                     'amount': suborder.amount,
-                    'item_price': float(suborder.item.price),
-                    'price': float(suborder.item.price*suborder.amount)
+                    'item_price': int(suborder.item.price),
+                    'suborder_price': int(suborder.item.price*suborder.amount)
                 }
                 for suborder in SubOrder.objects.filter(order=self)
             ]
             self.items = [
                 {
                     'name': item.name,
-                    'price': float(item.price),
+                    'price': int(item.price),
                 }
                 for item in Item.objects.filter(suborder__order=self)
             ]
@@ -62,7 +62,7 @@ class Order(models.Model):
         else:
             return sum(suborder['item_price'] * suborder['amount'] for suborder in self.suborders)
     def confirm(self):
-        self.is_confirm = True
+        self.is_confirmed = True
         self.save()
 
 # Create your models here.

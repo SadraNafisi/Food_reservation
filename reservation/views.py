@@ -236,7 +236,7 @@ class Order_Check(View):
             suborders=order.suborders
         else:
             suborders = SubOrder.objects.filter(order=order)
-        print(suborders)
+
         # is_admin= request.user.groups.filter(name='admins',user=request.user)
         if(order.customer != request.user)and(not request.user.is_staff ):
             messages.warning(request,'you are not authorized to see this order detail.')
