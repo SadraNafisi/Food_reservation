@@ -26,7 +26,7 @@
         </div>
       </div>
 
-
+      {% if items %}
      <div class="row d-flex align-items-center ">
             {% for item in items %}
        <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
@@ -78,9 +78,16 @@
         </div>
 
        {% endfor %}
-
      </div>
-
+      {% else %}
+            <h1 style="display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;">
+                No order available !
+            </h1>
+      {% endif %}
   </div>
 </div>
 
