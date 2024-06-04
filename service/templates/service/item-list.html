@@ -60,66 +60,14 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">are you sure you want to delete {{item.name}}</div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
-                     <a href="
-            {% for item in items %}
-       <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
-          <div class="card" >
-            {% if item.image %}
-            <img src="{{item.image.url}}" class="card-img-top" alt="Product Image" height="200" width="250">
-            {% else %}
-            <img src="{% static 'images/No_Image_Available.png'%}" class=" card-img-top"
-                 height="200" width="250"  />
-            {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">{{ item.name }}</h5>
-              <p class="card-text">{{ item.type }}</p>
-              <p class="card-text">{{ item.price }} t</p>
-              <p>availablity:
-                  {% if item.available %}
-                  <i class="fa fa-check" style="font-size:24px;color:green;"></i>
-                  {% else %}
-                  <i class="fa fa-close" style="font-size:24px;color:red;"></i>
-                  {% endif %}
-              </p>
-              <a href="{% url 'update-item' item.pk %}"><button type="button" class="btn btn-warning" >update</button></a>
-                <!-- Button trigger modal -->
-            <button type="button" class="btn btn-danger" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#Modal-{{item.pk}}">
-              delete
-            </button>
-
-            <!-- Modal -->
-
-            <div class="modal fade" id="Modal-{{item.pk}}" tabindex="-1" aria-labelledby="ModalLabel-{{item.pk}}" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">are you sure you want to delete {{item.name}}</div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
                      <a href="{% url 'delete-item' item.pk %}">
-                         <button type="button" class="btn btn-danger" data-mdb-ripple-init>Delete</button>
-                     </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </div>
-          </div>
-        </div>
-
-       {% endfor %}
-
-     {% url 'delete-item' item.pk %}">
-                         <button type="button" class="btn btn-danger" data-mdb-ripple-init>Delete</button>
+                         <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
                      </a>
                   </div>
                 </div>
