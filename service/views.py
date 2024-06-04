@@ -65,7 +65,7 @@ class Update_Item(View):
             item.image = None
         if item.name != contents['name']:
             item.name = contents['name']
-        if item.price != contents['price']:
+        if item.price != int(contents['price']):
             item.price = int(contents['price'])
         if item.type != contents['type']:
             type=Food_Type.objects.filter(name=contents['type']).get()
