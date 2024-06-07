@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from reservation.models import Item , Food_Type
 from django.contrib import messages
+from django.contrib.auth.models import User, UserManager, Group
 
 
 class Dashboard(View):
@@ -103,5 +104,30 @@ class Add_Item(View):
         item.save()
         messages.success(request,'the item created successfully!')
         return redirect('item-list')
+
+class Add_person(View):
+    def get(self,request,*args,**kwargs):
+        groups = Group.objects.all()
+        context={'groups':groups}
+        return render(request,'service/add-person.html',context)
+    def post(self,request,*args,**kwargs):
+        content=request.POST
+        if(User.objects.filter(username=content['username'])):
+            messages.warning(request,'this username already exists. try another one')
+            return redirect('add-person')
+
+        user=User.objects.create_user(username=content['username'], password=content['password']
+                                ,email=content['email'])
+        user.first_name=content['first_name']
+        user.last_name = content['last_name']
+        if ('staffs' in content.getlist('groups')):
+            user.is_staff = True
+        if ('admins' in content.getlist('groups')):
+            user.is_superuser = True
+        user.groups.set(Group.objects.filter(name__in=content.getlist('groups')))
+
+        user.save()
+        return redirect('dashboard')
+
 
 # Create your views here.
