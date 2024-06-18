@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .decorator import unauthenticated_user , allowed_user
 from django.utils.decorators import method_decorator
-
+from django.core.exceptions import ObjectDoesNotExist
 def loginUser_unreachable(request,):
     if (request.user.is_authenticated):
         messages.info(request, 'you are already in your account.')
@@ -39,6 +39,7 @@ def context_order_items(request,items,is_searching=False):
         context = {
             'items': items
         }
+
     return context
 
 class Index(View):
@@ -275,13 +276,25 @@ class Order_list_All(View):
 
 class Confirm_Order(View):
     def get(self,request,pk,*args,**kwargs):
-        order=Order.objects.filter(pk=pk).get()
+        try:
+            order=Order.objects.filter(pk=pk).get()
+        except ObjectDoesNotExist:
+            messages.warning(request,'this order deos not exists')
+            return redirect('index')
         order.is_confirmed=True
         order.save()
-        print(Order.objects.get(pk=pk).is_confirmed)
         return redirect('order-check',pk=pk)
 class Delete_Order(View):
     def get(self,request,pk,*args,**kwargs):
         Order.objects.get(pk=pk).delete()
         messages.success(request,"your previous order deleted successfully.")
         return redirect('index')
+class View_Unconfirmed_Suborders(View):
+    @method_decorator(login_required(login_url='login'))
+    def get(self,request,*args,**kwargs):
+        context={}
+        if( Order.objects.filter(customer=request.user,is_confirmed=False)):
+            order = Order.objects.filter(customer=request.user,is_confirmed=False).get()
+            context.update({'order':order})
+            print(order.suborder_set.all())
+        return render(request,'reservation/current-unconfirmed-suborders.html',context)

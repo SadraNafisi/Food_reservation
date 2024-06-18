@@ -6,7 +6,7 @@ from django.utils import timezone
 from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from reservation.models import Item , Food_Type
+from reservation.models import Item , Food_Type , SubOrder
 from django.contrib import messages
 from django.contrib.auth.models import User, UserManager, Group
 
@@ -72,6 +72,9 @@ class Update_Item(View):
             type=Food_Type.objects.filter(name=contents['type']).get()
             item.type = type
         if item.available != contents['available']:
+            if contents['available'] == 'False':
+                SubOrder.objects.filter(item=item.pk).delete()
+
             item.available = contents['available']
 
         item.save()
@@ -79,6 +82,8 @@ class Update_Item(View):
 
 
 class Delete_Item(View):
+    @method_decorator(login_required(login_url='login'))
+    @method_decorator(allowed_user(['admins', 'staffs']))
     def get(self,request,pk,*args,**kwargs):
         item=Item.objects.filter(pk=pk).get()
         item.delete()
@@ -86,6 +91,8 @@ class Delete_Item(View):
         return redirect('item-list')
 
 class Add_Item(View):
+    @method_decorator(login_required(login_url='login'))
+    @method_decorator(allowed_user(['admins', 'staffs']))
     def get(self,request,*args,**kwargs):
         types=Food_Type.objects.all()
         context={'types':types}
@@ -105,29 +112,64 @@ class Add_Item(View):
         messages.success(request,'the item created successfully!')
         return redirect('item-list')
 
-class Add_person(View):
+class Add_Edit_person(View):
+    @method_decorator(login_required(login_url='login'))
+    @method_decorator(allowed_user(['admins', 'staffs']))
     def get(self,request,*args,**kwargs):
         groups = Group.objects.all()
         context={'groups':groups}
-        return render(request,'service/add-person.html',context)
+        if 'pk' in kwargs:
+            user=User.objects.filter(pk=kwargs['pk']).get()
+            context.update({'person':user})
+        return render(request,'service/add-edit-person.html',context)
     def post(self,request,*args,**kwargs):
-        content=request.POST
-        if(User.objects.filter(username=content['username'])):
-            messages.warning(request,'this username already exists. try another one')
-            return redirect('add-person')
+        content = request.POST
 
-        user=User.objects.create_user(username=content['username'], password=content['password']
-                                ,email=content['email'])
+        if 'pk' in kwargs:
+            user = User.objects.filter(pk=kwargs['pk']).get()
+            if (content['username'] != user.username and User.objects.filter(username=content['username'])):
+                messages.warning(request, 'this username already exists. try another one')
+                return redirect('add-person')
+
+        else:
+            if(User.objects.filter(username=content['username'])):
+                messages.warning(request, 'this username already exists. try another one')
+                return redirect('add-person')
+            user = User.objects.create_user(username=content['username']
+                                            , password=content['password']
+                                            , email=content['email'])
+
         user.first_name=content['first_name']
         user.last_name = content['last_name']
         if ('staffs' in content.getlist('groups')):
             user.is_staff = True
+        else:
+            user.is_staff = False
         if ('admins' in content.getlist('groups')):
             user.is_superuser = True
+        else:
+            user.is_superuser = False
         user.groups.set(Group.objects.filter(name__in=content.getlist('groups')))
 
         user.save()
-        return redirect('dashboard')
+        return redirect('people-list')
 
+class List_People(View):
+    @method_decorator(login_required(login_url='login'))
+    @method_decorator(allowed_user(['admins', 'staffs']))
+    def get(self,request,*args,**kwargs):
+        people=User.objects.all()
 
+        context={'people':people}
+
+        return render(request,'service/people-list.html',context)
+
+class Delete_person(View):
+    @method_decorator(login_required(login_url='login'))
+    @method_decorator(allowed_user(['admins', 'staffs']))
+    def get(self,request,pk,*args,**kwargs):
+        user=User.objects.filter(pk=pk).get()
+        user.delete()
+        messages.success(request,f'{user.username} removed successfully')
+        return redirect('people-list')
 # Create your views here.

@@ -1,0 +1,84 @@
+{% extends 'service/base.html'%}
+{% block content %}
+{% load static%}
+<section class="vh-100" style="background-color: #508bfc;">
+  {% if messages %}
+      {% for message in messages%}
+      <div class="row d-flex justify-content-center ">
+        <div class="col-md-6  col-sm-12 offset-md-1 p-4 text-center ">
+          <div class="alert alert-{{message.tags}}" role="{{message.tags}}">
+                 {{message.tags}}: {{message}}
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      {% endif %}
+  <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+      <tr>
+        <th>Username</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for person in people %}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img
+                  src="{% static 'images/No_Image_Available.png' %}"
+                  alt=""
+                  style="width: 45px; height: 45px"
+                  class="rounded-circle"
+                  />
+              <div class="ms-3">
+                <p class="fw-bold mb-1">{{person.username}}</p>
+                <p class="text-muted mb-0">{{person.email}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{%for group in person.groups.all%} {{group.name}} {% if not forloop.last%},{%endif%} {%empty%} customer {% endfor %}</p>
+          </td>
+          <td>
+            {%if person.is_active %}
+            <span class="badge badge-success rounded-pill d-inline">Active</span>
+            {% else %}
+            <span class="badge badge-warning rounded-pill d-inline">Not Active</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'edit-person' person.pk%}"><button type="button" class="btn btn-link btn-sm btn-rounded">Edit</button></a>
+
+            <button type="button" class="btn btn-link btn-sm btn-rounded" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#Modal-{{person.pk}}">
+              delete
+            </button>
+
+            <!-- Modal -->
+
+            <div class="modal fade" id="Modal-{{person.pk}}" tabindex="-1" aria-labelledby="ModalLabel-{{person.pk}}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete {{person.username}}</h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">are you sure you want to delete {{person.username}}</div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
+                     <a href="{% url 'delete-person' person.pk %}">
+                         <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+                     </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{%endblock content%}

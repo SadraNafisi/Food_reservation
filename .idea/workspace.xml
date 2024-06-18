@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d5d96fd-6c0f-4786-83e9-1a76a3f96fcd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/service/templates/service/add-person.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reservation/templates/reservation/current-unconfirmed-suborders.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/templates/service/people-list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reservation/templates/reservation/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/templates/reservation/navigation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reservation/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reservation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/reservation/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/templates/service/add-person.html" beforeDir="false" afterPath="$PROJECT_DIR$/service/templates/service/add-edit-person.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/templates/service/dashboard-navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/service/templates/service/dashboard-navigation.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/views.py" afterDir="false" />

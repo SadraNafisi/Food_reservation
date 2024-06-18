@@ -26,11 +26,35 @@
           <a class="nav-link" href="{% url 'about-us' %}">About Us</a>
         </li>
           {% if request.user.is_staff %}
-          <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link" href="{%url 'dashboard'%}">dashboard</a>
         </li>
           {% endif %}
-
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+          <a href="{%url 'current-unconfirmed-suborders'%}">
+            <div>
+             <i class="fas fa-shopping-cart "></i>
+                {%if suborders %}
+             <span
+               class="badge bg-danger"
+               style="width: 30px;
+               height: 30px;
+               padding: 15.2px 7.8px;
+               font-size: 27px;
+               border-radius: 26px;
+               transform: perspective(0px) translate(-12px) rotate(0deg) scale(0.50);
+               transform-origin: top;
+               padding-right: 0;
+               padding-top: 0.2px;
+               padding-left: 0.2px;
+               text-align: center;border-width: 48px;
+             ">{{suborders|length}}</span>
+            </div>
+          {% endif %}
+          </a>
+          </li>
+          {% endif %}
       </ul>
       <!-- Left links -->
     </div>
@@ -53,7 +77,6 @@
              Logout
             </button>
         </a>
-
             {% else %}
       <a class="nav-link" href="{% url 'login'%}">
      <button data-mdb-ripple-init type="button" class="btn btn-link px-3 me-2" >

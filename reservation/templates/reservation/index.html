@@ -49,7 +49,7 @@
                     <h5 class="card-title">{{suborder.item.price}} t</h5>
                   </div>
                     {% if request.user.is_authenticated and suborder.item.available %}
-                    <input type="number" name="{{suborder.item.name}}_amount"  class="form-control" value={{ suborder.amount }} min="0" max="100" step="1" />
+                    <input type="number" name="{{suborder.item.name}}_amount"  class="form-control" value={{ suborder.amount }} min="0" max="24" step="1" />
                     {% endif %}
 
                     {% if suborder.item.available %}
