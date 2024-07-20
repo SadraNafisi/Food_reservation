@@ -27,9 +27,9 @@ class SubOrder(models.Model):
     def suborder_price (self):
         return self.amount * self.item.price
 class Order(models.Model):
-    customer = models.ForeignKey(User,on_delete=models.RESTRICT)
-    order_date = models.DateTimeField("Order date",auto_now_add=True) ##add this in final changes
-    is_confirmed = models.BooleanField(db_default=True,default=False)
+    customer = models.ForeignKey(User, on_delete=models.RESTRICT)
+    order_date = models.DateTimeField("Order date",auto_now_add=True) # add this in final changes
+    is_confirmed = models.BooleanField(db_default=True, default=False)
     suborders = models.JSONField(default=list)
     items = models.JSONField(default=list)
 

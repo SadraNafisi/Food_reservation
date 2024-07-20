@@ -18,7 +18,7 @@ class Dashboard(View):
         recent_orders= Order.objects.order_by("-order_date")[:4]
         today_order_amount = len(Order.objects.filter(order_date__date=date.today()))
         total_price = 0
-        for order in Order.objects.filter(order_date__date=date.today()):
+        for order in Order.objects.filter(order_date__date=date.today(),is_confirmed=True):
             total_price += order.total_price()
         today_total_income = total_price
 

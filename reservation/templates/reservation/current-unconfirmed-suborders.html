@@ -52,16 +52,6 @@
                 </div>
             </div>
             {% endfor %}
-            <!-- suborder card -->
-
-            <div class="row d-flex justify-content-center mt-4">
-                <div class="col-md-4  col-sm-12  p-2 text-center ">
-                   <a href="{% url 'order-confirm' order.pk %}"><button class="btn btn-primary btn-lg"> Confirm </button></a>
-                </div>
-                <div class="col-md-4  col-sm-12  p-2 text-center ">
-                   <a href="{% url 'order-delete' order.pk %}"><button class="btn btn-danger btn-lg"> Delete </button></a>
-                </div>
-            </div>
             {% else %}
             <h1 style="display: flex;
             justify-content: center;
