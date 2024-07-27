@@ -51,7 +51,13 @@
                     {% endif %}
                 </div>
             </div>
+
             {% endfor %}
+            <div class="row d-flex justify-content-center mt-4">
+            <div class="col-md-4  col-sm-12  p-2 text-center ">
+                <a href="{% url 'order-check' order.pk %}"><button class="btn btn-primary btn-lg"> Check </button></a>
+            </div>
+            </div>
             {% else %}
             <h1 style="display: flex;
             justify-content: center;
