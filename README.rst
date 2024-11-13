@@ -24,7 +24,7 @@ Installation
 
   git clone https://github.com/SadraNafisi/Food_reservation.git:
 
-  cd Food_reservation.git
+  cd Food_reservation
 
 2- Create python virtual enviornment(*virtenv*) in project directory and include that with ``source`` command:
 
@@ -40,11 +40,19 @@ Installation
 
   pip install -r requirement.txt
 
-4- Begin project by running ``manage.py``:
+4- Begin project by running ``manage.py runserver``:
 
 .. code-block:: bash
 
-  python manage.py
+  python manage.py runserver
+
+Roles
+=================
+Admin ==> Name: **admin** , Password: **admin**
+
+Customer ==> Name: **sadra** , Password: **sadra**
+
+**NOTE**: By signing up in website , a customer role would be created.
 
 Example
 =============
