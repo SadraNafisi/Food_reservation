@@ -52,7 +52,7 @@ Admin ==> Name: **admin** , Password: **admin**
 
 Customer ==> Name: **sadra** , Password: **sadra**
 
-**NOTE**: By signing up in website , a customer role would be created.
+**NOTE**: By signing up in website , a new customer role would be created.
 
 Example
 =============
