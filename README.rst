@@ -45,3 +45,16 @@ Installation
 .. code-block:: bash
 
   python manage.py
+
+Example
+=============
+.. raw:: html
+
+   <div style="display: flex; justify-content: space-around;">
+       <img src="screenshots/Login.png" alt="Login page" style="width: 850px;height:600px;">
+       <img src="screenshots/Order_menu.png" alt="Food Menu" style="width: 850px;height:600px;">
+       <img src="screenshots/SignUp.png" alt="SignUp page" style="width: 850px;height:600px;">
+       <img src="screenshots/dashboard_view.png" alt="Dashboard page" style="width: 850px;height:600px;">
+   </div>
+
+
