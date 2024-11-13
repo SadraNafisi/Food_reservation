@@ -29,9 +29,44 @@
                 </div>
             </div>
         </form>
-        <!-- available card -->
 
+        <form method="post" action="{%url 'index'%}" >
+            {% csrf_token %}
         <div class="row d-flex align-items-center ">
+            <!-- suborder card -->
+            {% for suborder in suborders %}
+            <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
+                <div class="card">
+                    {% if suborder.item.image %}
+                  <img src="{{ suborder.item.image.url }}" class="card-img-top"  height="200" width="250"/>
+                    {% else %}
+                    <img src="{% static 'images/No_Image_Available.png'%}" class=" card-img-top"
+                             height="200" width="250" style="border-style: solid;" />
+                    {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{suborder.item.type}}</h5>
+                    <h4 class="card-title">{{suborder.item.name}}</h4>
+                    <h5 class="card-title">{{suborder.item.price}} t</h5>
+                  </div>
+                    {% if request.user.is_authenticated and suborder.item.available %}
+                    <input type="number" name="{{suborder.item.name}}_amount"  class="form-control" value={{ suborder.amount }} min="0" max="24" step="1" />
+                    {% endif %}
+
+                    {% if suborder.item.available %}
+                  <footer class="text-center " style="background-color:green; color:white">
+                       <h3 class="mt-2">Available</h3>
+                  </footer>
+                    {% else %}
+                    <footer class="text-center " style="background-color:red; color:white">
+            <h3 class="mt-2">Out-Of-Order</h3>
+                    </footer>
+                    {% endif %}
+
+                </div>
+            </div>
+            {% endfor %}
+            <!-- suborder card -->
+            <!-- item card -->
             {% for item in items %}
             <div class="col-md-3 col-sm-12 offset-md-1 p-4 text-center">
                 <div class="card">
@@ -46,22 +81,38 @@
                     <h4 class="card-title">{{item.name}}</h4>
                     <h5 class="card-title">{{item.price}} t</h5>
                   </div>
+                    {% if request.user.is_authenticated and item.available %}
+                    <input type="number" name="{{item.name}}_amount"  class="form-control" value=0 min="0" max="100" step="1" />
+                    {% endif %}
+
                     {% if item.available %}
                   <footer class="text-center " style="background-color:green; color:white">
                        <h3 class="mt-2">Available</h3>
                   </footer>
                     {% else %}
                     <footer class="text-center " style="background-color:red; color:white">
-                       <h3 class="mt-2">Out-Of-Order</h3>
-                  </footer>
+            <h3 class="mt-2">Out-Of-Order</h3>
+                    </footer>
                     {% endif %}
 
                 </div>
             </div>
             {% endfor %}
-        </div>
+            <!-- item card -->
 
-         <!-- available card -->
+
+        </div>
+            {% if user.is_authenticated %}
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-md-3 col-sm-12 offset-md-1 text-center">
+                    <button type="submit" class ="btn btn-primary btn-lg">submit</button>
+                </div>
+            </div>
+            {% endif %}
+
+
+        </form>
+
     </div>
 </div>
 {% endblock content %}

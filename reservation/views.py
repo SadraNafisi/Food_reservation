@@ -8,76 +8,108 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .decorator import unauthenticated_user , allowed_user
 from django.utils.decorators import method_decorator
-
+from django.core.exceptions import ObjectDoesNotExist
 def loginUser_unreachable(request,):
     if (request.user.is_authenticated):
         messages.info(request, 'you are already in your account.')
         return True
     else:
         return False
+def context_order_items(request,items,is_searching=False):
+    """this method is because for showing what was
+       the unconfirmed orders of customers if they
+       have"""
+
+    if (request.user.is_authenticated) and (unconfirmed_order := Order.objects.filter(is_confirmed=False, customer=request.user)):
+        messages.info(request,"you did not confirm last "
+                              "order . their amount can be seen in items below."
+                              "also you could remove or confirm order in your orderlist.")
+        suborders = SubOrder.objects.filter(order=unconfirmed_order[0])
+        for suborder in suborders:
+            if not(suborder.item in items):
+                suborders=suborders.exclude(pk=suborder.pk)
+            else:
+                items = items.exclude(pk=suborder.item.pk)
+        context = {
+            'items': items,
+            'suborders': suborders
+        }
+
+    else:
+        context = {
+            'items': items
+        }
+
+    return context
 
 class Index(View):
     def get(self,request,*args,**kwarg):
         items = Item.objects.all().order_by('-available',"type__name",'name')
-        context={
-            'items':items
-        }
+        context= context_order_items(request,items)
+
         return render(request, 'reservation/index.html',context)
 
-class Order_Item(View):
-    @method_decorator(login_required(login_url='login'))
-    def get(self,request,*args,**kwargs):
-        items = Item.objects.filter(available=True).order_by("type__name",'name')
-
-        context = {
-            'items':items
-        }
-        return render(request, 'reservation/order.html', context)
-
     def post(self, request, *args, **kwargs):
+        '''it has a problem that in database should have only
+            one unconfirmed order.'''
         total_item_amount = 0
         items = Item.objects.filter(available=True).order_by("type__name", 'name')
+        unconfirmed_order = Order.objects.filter(customer=request.user,is_confirmed=False)
+        if not unconfirmed_order:
+            order = Order.objects.create(customer=request.user)
+        else:
+            order=Order.objects.filter(customer=request.user,is_confirmed=False)[0]
+
         for i in range(0, len(request.POST) - 1):
             chosen_item = items[i]
             try:
-                item_amount = request.POST[f'{chosen_item.name}_amount']
+                item_amount = int(request.POST[f'{chosen_item.name}_amount'])
             except:
                 messages.warning(request, f' {items[i]} not found')
+                order.delete()
                 return redirect('order-item')
 
-            if (int(item_amount) != 0):
-                total_item_amount += 1
-                if total_item_amount == 1:
-                    order = Order.objects.create(customer=request.user)
-                SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
-                print("helloll")
-
+            if(SubOrder.objects.filter(item=chosen_item, order=order)):
+                if(item_amount!=0):
+                    total_item_amount += item_amount
+                    suborder = SubOrder.objects.filter(item=chosen_item, order=order)[0]
+                    suborder.amount = item_amount
+                    print(suborder)
+                    suborder.save()
+                else:
+                    SubOrder.objects.filter(item=chosen_item, order=order).delete()
+            else:
+                if(item_amount!=0):
+                    total_item_amount += item_amount
+                    SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
         if (total_item_amount == 0):
             messages.info(request, 'you did not choose any of these items')
-            return redirect('order-item')
-
-        # print(SubOrder.objects.filter(order=order))
-        # context={
-        #     'suborders':SubOrder.objects.filter(order=order),
-        #     'order': order
-        #
-        # }
+            order.delete()
+            return redirect('index')
+        order.save()
         return redirect('order-check', pk=order.pk)
-
-        # if(len(suborders) == len(items)):
-        #     for suborder in suborders:
-        #         if suborder != 0:
-        #             SubOrder.objects.create()
-        # context={
+        #     if (int(item_amount) != 0):
+        #         total_item_amount += 1
+        #         if total_item_amount == 1 :
+        #             if not unconfirmed_order:
+        #                 order = Order.objects.create(customer=request.user).save()
+        #             else:
+        #                 order=Order.objects.filter(customer=request.user,is_confirmed=False)[0]
         #
-        # }
-        # return render(request,'reservation/order-check.html',context)
+        #
+        #         if(SubOrder.objects.filter(item=chosen_item, order=order)):
+        #             SubOrder.objects.filter(item=chosen_item, order=order).amount = item_amount
+        #         else:
+        #             print(order)
+        #             SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
+        #     elif unconfirmed_order and SubOrder.objects.filter(item=chosen_item , order=order):
+        #         SubOrder.objects.filter(items=chosen_item , order=order).delete()
+        # if (total_item_amount == 0):
+        #     messages.info(request, 'you did not choose any of these items')
+        #     return redirect('index')
+        #
+        # return redirect('order-check', pk=order.pk)
 
-
-class AboutUs(View):
-
-    def get(self,request,*args,**kwargs):
-        return render(request,'reservation/about-us.html')
 
 class IndexChoose(View):
     def get(self,request,*args,**kwargs):
@@ -85,12 +117,66 @@ class IndexChoose(View):
         choices= Item.objects.all().filter(
             Q(name__icontains=entry) | Q(type__name__contains=entry) | Q(price__icontains=entry)
         ).order_by('-available',"type__name",'name')
+        context = context_order_items(request,choices)
 
-        context={
-            'items':choices
-        }
 
-        return render(request,'reservation/index.html',context)
+        return render(request, 'reservation/index.html', context)
+
+
+# class Order_Item(View):
+#     @method_decorator(login_required(login_url='login'))
+#     def get(self,request,*args,**kwargs):
+#         items = Item.objects.filter(available=True).order_by("type__name",'name')
+#
+#         context = {
+#             'items':items
+#         }
+#         return render(request, 'reservation/order.html', context)
+#
+#     def post(self, request, *args, **kwargs):
+#         total_item_amount = 0
+#         items = Item.objects.filter(available=True).order_by("type__name", 'name')
+#         for i in range(0, len(request.POST) - 1):
+#             chosen_item = items[i]
+#             try:
+#                 item_amount = request.POST[f'{chosen_item.name}_amount']
+#             except:
+#                 messages.warning(request, f' {items[i]} not found')
+#                 return redirect('order-item')
+#
+#             if (int(item_amount) != 0):
+#                 total_item_amount += 1
+#                 if total_item_amount == 1:
+#                     order = Order.objects.create(customer=request.user)
+#                 SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
+#                 print("helloll")
+#
+#         if (total_item_amount == 0):
+#             messages.info(request, 'you did not choose any of these items')
+#             return redirect('order-item')
+#
+#         # print(SubOrder.objects.filter(order=order))
+#         # context={
+#         #     'suborders':SubOrder.objects.filter(order=order),
+#         #     'order': order
+#         #
+#         # }
+#         return redirect('order-check', pk=order.pk)
+#
+#         # if(len(suborders) == len(items)):
+#         #     for suborder in suborders:
+#         #         if suborder != 0:
+#         #             SubOrder.objects.create()
+#         # context={
+#         #
+#         # }
+#         # return render(request,'reservation/order-check.html',context)
+
+class AboutUs(View):
+
+    def get(self,request,*args,**kwargs):
+        return render(request,'reservation/about-us.html')
+
 
 class Signup_User(View):
     @method_decorator(unauthenticated_user)
@@ -147,7 +233,11 @@ class Logout_User(View):
 class Order_Check(View):
     def get(self,request,pk,*args,**kwargs):
         order = Order.objects.filter(pk=pk)[0]
-        suborders = SubOrder.objects.filter(order=order)
+        if order.is_confirmed:
+            suborders=order.suborders
+        else:
+            suborders = SubOrder.objects.filter(order=order)
+
         # is_admin= request.user.groups.filter(name='admins',user=request.user)
         if(order.customer != request.user)and(not request.user.is_staff ):
             messages.warning(request,'you are not authorized to see this order detail.')
@@ -163,7 +253,7 @@ class Order_Check(View):
 class Order_List(View):
     @method_decorator(login_required(login_url='login'))
     def get(self,request,*args,**kwargs):
-        orders=Order.objects.filter(customer=request.user)
+        orders=Order.objects.filter(customer=request.user).order_by('-pk')
 
         context={
             'orders': orders
@@ -176,7 +266,7 @@ class Order_List(View):
 class Order_list_All(View):
     @method_decorator(allowed_user(['admins','staffs']))
     def get(self,request,*args,**kwargs):
-        orders=Order.objects.all()
+        orders=Order.objects.all().order_by('-pk')
 
         context = {
             'orders': orders
@@ -184,3 +274,27 @@ class Order_list_All(View):
 
         return render(request, 'reservation/order-list.html', context)
 
+class Confirm_Order(View):
+    def get(self,request,pk,*args,**kwargs):
+        try:
+            order=Order.objects.filter(pk=pk).get()
+        except ObjectDoesNotExist:
+            messages.warning(request,'this order deos not exists')
+            return redirect('index')
+        order.is_confirmed=True
+        order.save()
+        return redirect('order-check',pk=pk)
+class Delete_Order(View):
+    def get(self,request,pk,*args,**kwargs):
+        Order.objects.get(pk=pk).delete()
+        messages.success(request,"your previous order deleted successfully.")
+        return redirect('index')
+class View_Unconfirmed_Suborders(View):
+    @method_decorator(login_required(login_url='login'))
+    def get(self,request,*args,**kwargs):
+        context={}
+        if( Order.objects.filter(customer=request.user,is_confirmed=False)):
+            order = Order.objects.filter(customer=request.user,is_confirmed=False).get()
+            context.update({'order':order})
+            print(order.suborder_set.all())
+        return render(request,'reservation/current-unconfirmed-suborders.html',context)

@@ -1,0 +1,70 @@
+{% extends 'service/base.html'%}
+
+{% block content%}
+<section class="vh-100" style="background-color:purple;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        {% if messages %}
+      {% for message in messages%}
+      <div class="row d-flex justify-content-center ">
+        <div class="col-md-12  col-sm-12 p-4 text-center ">
+          <div class="alert alert-{{message.tags}}" role="{{message.tags}}">
+                 {{message.tags}}: {{message}}
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      {% endif %}
+        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <form method="post" action={% if person %} {% url 'edit-person' person.pk %} {%else%} "{% url 'add-person' %} " {% endif%}>
+              {% csrf_token %}
+              <h3 class="mb-5">Add New person</h3>
+              <div class=" mb-4">
+                <label class="form-label d-flex align-items-center" for="username">username:</label>
+                <input type="text" id="username" name="username" value="{{person.username}}" class="form-control form-control-lg" required />
+              </div>
+              {% if not person %}
+              <div class=" mb-4">
+                <label class="form-label d-flex align-items-center" for="password">password:</label>
+                <input type="password" id="password" name="password" value="{{person.password}}" class="form-control form-control-lg" required />
+              </div>
+              {% endif%}
+
+              <div class=" mb-4">
+                <label class="form-label d-flex align-items-center" for="email">email(optional):</label>
+                <input type="email" id="email" name="email" value="{{person.email}}" class="form-control form-control-lg"  />
+              </div>
+
+              <div class=" mb-4">
+                <label class="form-label d-flex align-items-center" for="Fname">first name(optional):</label>
+                <input type="text" id="Fname" name="first_name" value="{{person.first_name}}" class="form-control form-control-lg"  />
+              </div>
+
+              <div class=" mb-4">
+                <label class="form-label d-flex align-items-center" for="Lname">last name(optional):</label>
+                <input type="text" id="Lname" name="last_name" value="{{person.last_name}}" class="form-control form-control-lg"  />
+              </div>
+
+              <!-- make groups checkbox here -->
+              <label class="form-label d-flex align-items-center" for="groups">groups:(if none of them choose , it is customer)</label>
+              <div class="form-check form-check-inline" id="groups">
+                {%for group in groups%}
+                  <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="groups" id="inlineRadio{{ forloop.counter }}"
+                   value="{{ group }}" {% if group in person.groups.all %} checked {% endif %} />
+                  <label class="form-check-label" for="inlineRadio{{ forloop.counter }}">{{group.name}}</label>
+                  </div>
+                {% endfor %}
+              </div>
+              <button  data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content%}

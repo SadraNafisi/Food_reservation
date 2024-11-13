@@ -26,10 +26,16 @@
     {% for suborder in suborders %}
     <div class="row d-flex justify-content-center ">
         <div class="col-md-6  col-sm-12  p-2 text-center ">
-
             <h2>
-              {{suborder.item.name}}{{suborder.amount|pluralize}}  :  {{suborder.amount}} * {{suborder.item.price}} =
+            {%if order.is_confirmed %}
+                {{ suborder.item_name }}{{suborder.amount|pluralize}}  :  {{suborder.amount}} * {{suborder.item_price}} =
                 {{suborder.suborder_price}}
+            {%else%}
+
+                {{suborder.item.name}}{{suborder.amount|pluralize}}  :  {{suborder.amount}} * {{suborder.item.price}} =
+                {{suborder.suborder_price}}
+
+            {% endif %}
             </h2>
         </div>
     </div>
@@ -38,6 +44,23 @@
         <div class="col-md-7  col-sm-12  p-2 text-center ">
             <h1 >Total money: {{order.total_price}} t</h1>
         </div>
+    </div>
+      {% if not order.is_confirmed %}
+      <div class="row d-flex justify-content-center mt-4">
+        <div class="col-md-4  col-sm-12  p-2 text-center ">
+           <a href="{% url 'order-confirm' order.pk %}"><button class="btn btn-primary btn-lg"> Confirm </button></a>
+        </div>
+        <div class="col-md-4  col-sm-12  p-2 text-center ">
+           <a href="{% url 'order-delete' order.pk %}"><button class="btn btn-danger btn-lg"> Delete </button></a>
+        </div>
+      </div>
+      {% else %}
+      <div class="row d-flex justify-content-center mt-4">
+        <div class="col-md-7  col-sm-12  p-2 text-center ">
+            <h2>Order Confirmed !</h2>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
  </div>
