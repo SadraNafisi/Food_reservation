@@ -88,27 +88,6 @@ class Index(View):
             return redirect('index')
         order.save()
         return redirect('order-check', pk=order.pk)
-        #     if (int(item_amount) != 0):
-        #         total_item_amount += 1
-        #         if total_item_amount == 1 :
-        #             if not unconfirmed_order:
-        #                 order = Order.objects.create(customer=request.user).save()
-        #             else:
-        #                 order=Order.objects.filter(customer=request.user,is_confirmed=False)[0]
-        #
-        #
-        #         if(SubOrder.objects.filter(item=chosen_item, order=order)):
-        #             SubOrder.objects.filter(item=chosen_item, order=order).amount = item_amount
-        #         else:
-        #             print(order)
-        #             SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
-        #     elif unconfirmed_order and SubOrder.objects.filter(item=chosen_item , order=order):
-        #         SubOrder.objects.filter(items=chosen_item , order=order).delete()
-        # if (total_item_amount == 0):
-        #     messages.info(request, 'you did not choose any of these items')
-        #     return redirect('index')
-        #
-        # return redirect('order-check', pk=order.pk)
 
 
 class IndexChoose(View):
@@ -210,7 +189,6 @@ class Login_User(View):
         return render(request,'reservation/login.html')
 
     def post(self,request,*args,**kwargs):
-
         username = request.POST['username']
         password = request.POST['password']
 
@@ -279,7 +257,7 @@ class Confirm_Order(View):
         try:
             order=Order.objects.filter(pk=pk).get()
         except ObjectDoesNotExist:
-            messages.warning(request,'this order deos not exists')
+            messages.warning(request,'this order does not exists')
             return redirect('index')
         order.is_confirmed=True
         order.save()

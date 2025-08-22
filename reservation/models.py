@@ -26,6 +26,7 @@ class SubOrder(models.Model):
         return f' {self.item.name}(order{self.order.pk})'
     def suborder_price (self):
         return self.amount * self.item.price
+
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.RESTRICT)
     order_date = models.DateTimeField("Order date",auto_now_add=True) # add this in final changes
