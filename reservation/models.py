@@ -2,17 +2,19 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+
+
 class Item(models.Model):
     name = models.CharField(max_length=64,unique=True)
-    image = models.ImageField(upload_to="item_images/",blank=True)
+    image = models.ImageField(upload_to="item_images/", blank=True)
     price = models.DecimalField(max_digits=8 , decimal_places=0,blank=True,default=0)
-    type = models.ForeignKey("Food_Type", on_delete=models.RESTRICT)
+    type = models.ForeignKey("ItemType", on_delete=models.RESTRICT)
     available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
-class Food_Type(models.Model):
+class ItemType(models.Model):
     name = models.CharField(max_length=64,unique=True)
 
     def __str__(self):

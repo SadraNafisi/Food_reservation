@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from reservation import models
-class Food_TypeSerializer(serializers.ModelSerializer):
+class ItemTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Food_Type
+        model = models.ItemType
         fields=['name']
 class ItemSerializer(serializers.ModelSerializer):
-    type = Food_TypeSerializer(many=False)
+    type = ItemTypeSerializer(many=False)
     class Meta:
         model = models.Item
         exclude=('image','available',)

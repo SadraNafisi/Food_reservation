@@ -6,7 +6,7 @@ from django.utils import timezone
 from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from reservation.models import Item , Food_Type , SubOrder
+from reservation.models import Item , ItemType , SubOrder
 from django.contrib import messages
 from django.contrib.auth.models import User, UserManager, Group
 
@@ -45,7 +45,7 @@ class Update_Item(View):
     @method_decorator(allowed_user(['admins', 'staffs']))
     def get(self,request,pk,*args,**kwargs):
         item=Item.objects.filter(pk=pk).get()
-        types=Food_Type.objects.all()
+        types=ItemType.objects.all()
         context={
             'item':item,
             'types':types
@@ -69,7 +69,7 @@ class Update_Item(View):
         if item.price != int(contents['price']):
             item.price = int(contents['price'])
         if item.type != contents['type']:
-            type=Food_Type.objects.filter(name=contents['type']).get()
+            type=ItemType.objects.filter(name=contents['type']).get()
             item.type = type
         if item.available != contents['available']:
             if contents['available'] == 'False':
@@ -94,14 +94,14 @@ class Add_Item(View):
     @method_decorator(login_required(login_url='login'))
     @method_decorator(allowed_user(['admins', 'staffs']))
     def get(self,request,*args,**kwargs):
-        types=Food_Type.objects.all()
+        types=ItemType.objects.all()
         context={'types':types}
         return render(request,'service/add-item.html',context)
 
     def post(self,request,*args,**kwargs):
         content=request.POST
 
-        type=Food_Type.objects.filter(name=content['type']).get()
+        type=ItemType.objects.filter(name=content['type']).get()
         item=Item.objects.create(name=content['name'],type=type,available=content['available'])
         print(content['price'])
         if content['price']:
