@@ -9,6 +9,10 @@ from django.contrib.auth.decorators import login_required
 from .decorator import unauthenticated_user , allowed_user
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist
+
+from .forms import SubOrderForm,SubOrderformset
+
+
 def loginUser_unreachable(request,):
     if (request.user.is_authenticated):
         messages.info(request, 'you are already in your account.')
@@ -43,51 +47,83 @@ def context_order_items(request,items,is_searching=False):
     return context
 
 class Index(View):
-    def get(self,request,*args,**kwarg):
-        items = Item.objects.all().order_by('-available',"type__name",'name')
-        context= context_order_items(request,items)
+    def get_order(self,user):
+        order, create = Order.objects.get_or_create(customer=user, is_confirmed=False)
+        return order
 
-        return render(request, 'reservation/index.html',context)
+    def get_items(self):
+        items = Item.objects.all().order_by('-available', "type__name", 'name')
+        return items
+    def get(self,request,*args,**kwarg):
+        order = self.get_order(request.user)
+        items = self.get_items()
+        # context= context_order_items(request,items)
+        inital_data = []
+        for item in items:
+            suborder = SubOrder.objects.filter(order=order, item=item).first()
+            inital_data.append({"amount": suborder.amount if suborder else 0})
+        formset = SubOrderformset(initial=inital_data)
+        items_suborder_forms = zip(items,formset.forms)
+
+        return render(request, 'reservation/index.html',
+                      {'items_suborder_forms':items_suborder_forms, 'suborder_formset': formset})
 
     def post(self, request, *args, **kwargs):
         '''it has a problem that in database should have only
             one unconfirmed order.'''
-        total_item_amount = 0
-        items = Item.objects.filter(available=True).order_by("type__name", 'name')
-        unconfirmed_order = Order.objects.filter(customer=request.user,is_confirmed=False)
-        if not unconfirmed_order:
-            order = Order.objects.create(customer=request.user)
-        else:
-            order=Order.objects.filter(customer=request.user,is_confirmed=False)[0]
-
-        for i in range(0, len(request.POST) - 1):
-            chosen_item = items[i]
-            try:
-                item_amount = int(request.POST[f'{chosen_item.name}_amount'])
-            except:
-                messages.warning(request, f' {items[i]} not found')
-                order.delete()
-                return redirect('order-item')
-
-            if(SubOrder.objects.filter(item=chosen_item, order=order)):
-                if(item_amount!=0):
-                    total_item_amount += item_amount
-                    suborder = SubOrder.objects.filter(item=chosen_item, order=order)[0]
-                    suborder.amount = item_amount
-                    print(suborder)
+        order = self.get_order(request.user)
+        items = self.get_items()
+        formset = SubOrderformset(request.POST)
+        if formset.is_valid():
+            for form,item in zip(formset.forms, items):
+                amount = form.cleaned_data.get("amount")
+                print(amount)
+                if amount and amount > 0:
+                    suborder, created = SubOrder.objects.get_or_create(order=order, item=item)
+                    suborder.amount = amount
                     suborder.save()
                 else:
-                    SubOrder.objects.filter(item=chosen_item, order=order).delete()
-            else:
-                if(item_amount!=0):
-                    total_item_amount += item_amount
-                    SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
-        if (total_item_amount == 0):
-            messages.info(request, 'you did not choose any of these items')
-            order.delete()
-            return redirect('index')
-        order.save()
+                    messages.info(request,'you didn\'t choose or something went wrong . please try again')
+                    return redirect('index')
         return redirect('order-check', pk=order.pk)
+        order, create = Order.objects.get_or_create(customer=request.user, is_confirmed=False)
+        items = Item.objects.all().order_by('-available', "type__name", 'name')
+        # total_item_amount = 0
+        # items = Item.objects.filter(available=True).order_by("type__name", 'name')
+        # unconfirmed_order = Order.objects.filter(customer=request.user,is_confirmed=False)
+        # if not unconfirmed_order:
+        #     order = Order.objects.create(customer=request.user)
+        # else:
+        #     order=Order.objects.filter(customer=request.user,is_confirmed=False)[0]
+        #
+        # for i in range(0, len(request.POST) - 1):
+        #     chosen_item = items[i]
+        #     try:
+        #         item_amount = int(request.POST[f'{chosen_item.name}_amount'])
+        #     except:
+        #         messages.warning(request, f' {items[i]} not found')
+        #         order.delete()
+        #         return redirect('order-item')
+        #
+        #     if(SubOrder.objects.filter(item=chosen_item, order=order)):
+        #         if(item_amount!=0):
+        #             total_item_amount += item_amount
+        #             suborder = SubOrder.objects.filter(item=chosen_item, order=order)[0]
+        #             suborder.amount = item_amount
+        #             print(suborder)
+        #             suborder.save()
+        #         else:
+        #             SubOrder.objects.filter(item=chosen_item, order=order).delete()
+        #     else:
+        #         if(item_amount!=0):
+        #             total_item_amount += item_amount
+        #             SubOrder.objects.create(item=chosen_item, amount=item_amount, order=order).save()
+        # if (total_item_amount == 0):
+        #     messages.info(request, 'you did not choose any of these items')
+        #     order.delete()
+        #     return redirect('index')
+        # order.save()
+        # return redirect('order-check', pk=order.pk)
 
 
 class IndexChoose(View):

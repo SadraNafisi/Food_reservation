@@ -7,3 +7,5 @@ class SubOrderForm(forms.ModelForm):
         widgets = {
             "quantity":forms.NumberInput(attrs={"min":0})
         }
+
+SubOrderformset = forms.formset_factory(SubOrderForm,extra=0)

@@ -22,7 +22,7 @@ class ItemType(models.Model):
 
 class SubOrder(models.Model):
     item = models.ForeignKey('Item',on_delete=models.CASCADE)
-    amount = models.IntegerField()
+    amount = models.PositiveIntegerField(default=1)
     order = models.ForeignKey('Order',on_delete=models.CASCADE)
     def __str__(self):
         return f' {self.item.name}(order{self.order.pk})'
