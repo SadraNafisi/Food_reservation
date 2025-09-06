@@ -1,0 +1,28 @@
+{% load static %}
+<div class="card">
+    {% if item.image %}
+  <img src="{{ item.image.url }}" class="card-img-top"  height="200" width="250"/>
+    {% else %}
+    <img src="{% static 'images/No_Image_Available.png'%}" class=" card-img-top"
+             height="200" width="250" style="border-style: solid;" />
+    {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{item.type}}</h5>
+    <h4 class="card-title">{{item.name}}</h4>
+    <h5 class="card-title">{{item.price}} t</h5>
+  </div>
+    {% if request.user.is_authenticated and item.available %}
+    {{suborder_form.amount}}
+    {% endif %}
+
+    {% if item.available %}
+  <footer class="text-center " style="background-color:green; color:white">
+       <h3 class="mt-2">Available</h3>
+  </footer>
+    {% else %}
+    <footer class="text-center " style="background-color:red; color:white">
+        <h3 class="mt-2">Out-Of-Order</h3>
+    </footer>
+    {% endif %}
+
+</div>

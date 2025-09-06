@@ -55,18 +55,21 @@ class Index(View):
         items = Item.objects.all().order_by('-available', "type__name", 'name')
         return items
     def get(self,request,*args,**kwarg):
-        order = self.get_order(request.user)
         items = self.get_items()
-        # context= context_order_items(request,items)
-        inital_data = []
-        for item in items:
-            suborder = SubOrder.objects.filter(order=order, item=item).first()
-            inital_data.append({"amount": suborder.amount if suborder else 0})
-        formset = SubOrderformset(initial=inital_data)
-        items_suborder_forms = zip(items,formset.forms)
-
+        if request.user.is_authenticated:
+            order = self.get_order(request.user)
+            # context= context_order_items(request,items)
+            inital_data = []
+            for item in items:
+                suborder = SubOrder.objects.filter(order=order, item=item).first()
+                inital_data.append({"amount": suborder.amount if suborder else 0})
+            formset = SubOrderformset(initial=inital_data)
+            items_suborder_forms = zip(items,formset.forms)
+            context = {'items_suborder_forms':items_suborder_forms, 'suborder_formset': formset}
+        else:
+            context = {'items':items}
         return render(request, 'reservation/index.html',
-                      {'items_suborder_forms':items_suborder_forms, 'suborder_formset': formset})
+                     context )
 
     def post(self, request, *args, **kwargs):
         '''it has a problem that in database should have only
@@ -74,17 +77,23 @@ class Index(View):
         order = self.get_order(request.user)
         items = self.get_items()
         formset = SubOrderformset(request.POST)
+        total_amount = 0
         if formset.is_valid():
             for form,item in zip(formset.forms, items):
                 amount = form.cleaned_data.get("amount")
-                print(amount)
-                if amount and amount > 0:
+                total_amount += amount
+                if amount > 0:
                     suborder, created = SubOrder.objects.get_or_create(order=order, item=item)
                     suborder.amount = amount
                     suborder.save()
-                else:
-                    messages.info(request,'you didn\'t choose or something went wrong . please try again')
-                    return redirect('index')
+                elif amount == 0 and (suborder:=SubOrder.objects.filter(order=order,item=item).first()):
+                    suborder.delete()
+        else:
+            messages.info(request,'something went wrong . please try again')
+            return redirect('index')
+        if total_amount == 0:
+            messages.info(request,'you didn\'nt choose any items.')
+            return redirect('index')
         return redirect('order-check', pk=order.pk)
         order, create = Order.objects.get_or_create(customer=request.user, is_confirmed=False)
         items = Item.objects.all().order_by('-available', "type__name", 'name')
